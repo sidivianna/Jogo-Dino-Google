@@ -1,5 +1,5 @@
 # Dino Game
-# Pontuação
+# Game Over
 
 import pygame
 from pygame.locals import *
@@ -20,6 +20,7 @@ ALTURA = 480
 BRANCO = (255,255,255)
 
 tela = pygame.display.set_mode((LARGURA, ALTURA))
+
 pygame.display.set_caption('Dino Game')
 
 sprite_sheet = pygame.image.load(os.path.join(diretorio_imagens, 'dinoSpritesheet.png')).convert_alpha() 
@@ -27,10 +28,10 @@ sprite_sheet = pygame.image.load(os.path.join(diretorio_imagens, 'dinoSpriteshee
 som_colisao = pygame.mixer.Sound(os.path.join(diretorio_sons, 'sons_death_sound.wav'))
 som_colisao.set_volume(1)
 
-colidiu = False
-
 som_pontuacao = pygame.mixer.Sound(os.path.join(diretorio_sons, 'sons_score_sound.wav'))
 som_pontuacao.set_volume(1)
+
+colidiu = False
 
 escolha_obstaculo = choice([0, 1])
 
@@ -43,7 +44,17 @@ def exibe_mensagem(msg, tamanho, cor):
     mensagem = f'{msg}'
     texto_formatado = fonte.render(mensagem, True, cor)
     return texto_formatado
-    #criar as mensagens escritas na tela.
+
+def reiniciar_jogo():
+    global pontos, velocidade_jogo, colidiu, escolha_obstaculo
+    pontos = 0
+    velocidade_jogo = 10
+    colidiu = False
+    dino.rect.y = ALTURA - 64 - 96//2
+    dino.pulo = False
+    dino_voador.rect.x = LARGURA
+    cacto.rect.x = LARGURA
+    escolha_obstaculo = choice([0, 1])
 
 class Dino(pygame.sprite.Sprite):
     def __init__(self):
@@ -193,11 +204,14 @@ while True:
             exit()
         
         if event.type == KEYDOWN:
-            if event.key == K_SPACE:
+            if event.key == K_SPACE and colidiu == False:
                 if dino.rect.y != dino.pos_y_inicial: 
                     pass
                 else:
                     dino.pular()
+
+            if event.key == K_r and colidiu == True:
+                reiniciar_jogo()
 
     colisoes = pygame.sprite.spritecollide(dino, grupo_obstaculos, False, pygame.sprite.collide_mask)       
 
@@ -217,20 +231,23 @@ while True:
     if colidiu == True:
         if pontos % 100 == 0:
             pontos += 1
-        pass
+        game_over = exibe_mensagem("GAME OVER", 40, (0,0,0))
+        tela.blit(game_over, (LARGURA//2, ALTURA//2))
+        restart = exibe_mensagem('Pressione R para reiniciar', 20, (0,0,0))
+        tela.blit(restart, (LARGURA//2, (ALTURA//2) + 60))
+
     else:
         pontos += 1
         todas_as_sprites.update()       
         texto_pontos = exibe_mensagem(pontos, 40, (0,0,0))
-        # chama a função que exibe o contador de pontos na tela
-
+      
     if pontos % 100 == 0:
         som_pontuacao.play()
         if velocidade_jogo >= 23: 
             velocidade_jogo += 0
         else:
             velocidade_jogo += 1
-            #incrementos na velocidade do jogo de acordo com a pontuação
+    
 
     tela.blit(texto_pontos, (520, 30))
         
