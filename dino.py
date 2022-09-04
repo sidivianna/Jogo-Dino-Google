@@ -1,5 +1,5 @@
 # Dino Game
-# Nuvens
+# Chão
 
 import pygame
 from pygame.locals import *
@@ -35,7 +35,7 @@ class Dino(pygame.sprite.Sprite):
         self.index_lista = 0
         self.image = self.imagens_dinossaouro[self.index_lista]
         self.rect = self.image.get_rect()
-        self.rect.center = (100, ALTURA - 90)
+        self.rect.center = (100, ALTURA - 64) # ajuste na posição do dinossauro e relação ao solo.
         
     
     def update(self):
@@ -50,18 +50,32 @@ class Nuvens(pygame.sprite.Sprite):
         self.image = sprite_sheet.subsurface((7*32, 0), (32, 32))
         self.image = pygame.transform.scale(self.image, (32*3, 32*3))
         self.rect = self.image.get_rect()
-        self.rect.y = randrange(50,200, 50) # randomizar o aparecimento da nuvens
-        self.rect.x = LARGURA - randrange(30, 300, 90) # posições das nuvens em x
-        # definições de posicionamento e carregamento das sprites nuvens.
+        self.rect.y = randrange(50,200, 50) 
+        self.rect.x = LARGURA - randrange(30, 300, 90) 
 
     def update(self):
-        if self.rect.topright[0] < 0: #efeito da nuvem ir sumindo no canto esquerdo da tela
+        if self.rect.topright[0] < 0: 
             self.rect.x = LARGURA 
             self.rect.y = randrange(50,200, 50)
         self.rect.x -= 10
-        # loop para criar o movimento das nuvens.
         
+class Chao(pygame.sprite.Sprite):
+    def __init__(self, pos_x):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = sprite_sheet.subsurface((64*3, 0), (32,32))
+        self.image = pygame.transform.scale(self.image, (32*2, 32*2))
+        self.rect = self.image.get_rect()
+        self.rect.y = ALTURA - 64
+        self.rect.x = pos_x * 64
+        # criar a exibição do chão na tela do jogo
 
+    def update(self):
+        if self.rect.topright[0] < 0: 
+            self.rect.x = LARGURA 
+        self.rect.x -= 10
+        # função para o solo se "mover"
+
+    
 todas_as_sprites = pygame.sprite.Group()
 dino = Dino()
 todas_as_sprites.add(dino)
@@ -69,7 +83,11 @@ todas_as_sprites.add(dino)
 for i in range(4):
     nuvem = Nuvens()
     todas_as_sprites.add(nuvem)
-# instanciar objeto nuven
+
+for i in range(LARGURA*2//64):
+    chao = Chao(i)
+    todas_as_sprites.add(chao) # instanciar loop para repetição do chao
+
 
 relogio = pygame.time.Clock()
 while True:
@@ -84,4 +102,3 @@ while True:
     todas_as_sprites.update()
 
     pygame.display.flip()
-
