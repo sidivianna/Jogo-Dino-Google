@@ -9,3 +9,4 @@ Parte 8-Game-Over
 - definir o reiniciar exatamente da posição inicial do jogo.
 - correção de bug de som.
 
+
