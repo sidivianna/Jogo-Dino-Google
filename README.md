@@ -1,8 +1,10 @@
 # Jogo-Dino-google
 Recriação do jogo do dinossauro do Google
 
-## Parte 1
-- criação da base do jogo
-- carregamento do sprite do dinossauro na tela
-- definições de posicionamento 
-- loop de repetição para o movimento do dinossauro
+ 2-Nuvens
+## Parte 2
+- criação da classe nuvens
+- configurar posição da nuvem
+- configurar velocidade do movimento da nuvem
+- criar loop de repetição para aparecimento das nuvens
+- randomizar a ordem e local do aparecimento da nuvem
