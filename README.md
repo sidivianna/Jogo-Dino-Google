@@ -1,6 +1,7 @@
 # Jogo-Dino-google
 Recriação do jogo do dinossauro do Google
 
+ 2-Nuvens
 ## Parte 2
 - criação da classe nuvens
 - configurar posição da nuvem
