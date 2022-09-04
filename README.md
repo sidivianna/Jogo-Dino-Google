@@ -1,10 +1,12 @@
 # Jogo-Dino-google
 Recriação do jogo do dinossauro do Google
 
- 2-Nuvens
-## Parte 2
-- criação da classe nuvens
-- configurar posição da nuvem
-- configurar velocidade do movimento da nuvem
-- criar loop de repetição para aparecimento das nuvens
-- randomizar a ordem e local do aparecimento da nuvem
+Parte 8-Game-Over
+
+- criada a mensagem de gameover quando houver colisão.
+- criar a função para reiniciar o jogo quando houver colisão.
+- definir o reinicio apenas para quando houver colisão.
+- definir o reiniciar exatamente da posição inicial do jogo.
+- correção de bug de som.
+
+
