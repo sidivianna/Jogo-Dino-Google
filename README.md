@@ -1,7 +1,7 @@
 # Jogo-Dino-google
 Recriação do jogo do dinossauro do Google
 
-Parte 2-Chão
+Parte 3-Chão
 
 - carregar o posicionamento das nuvens
 - criar o efeito da nuvem ir sumindo e reaparecer no outro lado
