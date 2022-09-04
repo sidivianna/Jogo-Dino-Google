@@ -1,5 +1,5 @@
 # Dino Game
-# Pulo
+# Colisão sprites
 
 import pygame
 from pygame.locals import *
@@ -8,12 +8,11 @@ import os
 from random import randrange
 
 pygame.init()
-pygame.mixer.init() #iniciar o dispositivo de sons
+pygame.mixer.init() 
 
 diretorio_principal = os.path.dirname(__file__)
 diretorio_imagens = os.path.join(diretorio_principal, 'imagens')
 diretorio_sons = os.path.join(diretorio_principal, 'sons')
-
 
 LARGURA = 640
 ALTURA = 480
@@ -21,35 +20,42 @@ ALTURA = 480
 BRANCO = (255,255,255)
 
 tela = pygame.display.set_mode((LARGURA, ALTURA))
+
 pygame.display.set_caption('Dino Game')
 
 sprite_sheet = pygame.image.load(os.path.join(diretorio_imagens, 'dinoSpritesheet.png')).convert_alpha() 
+
+som_colisao = pygame.mixer.Sound(os.path.join(diretorio_sons, 'sons_death_sound.wav'))
+
+som_colisao.set_volume(1)
+
+colidiu = False
+
 
 class Dino(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.som_pulo = pygame.mixer.Sound(os.path.join(diretorio_sons, 'sons_jump_sound.wav'))
-        # importar o som do pulo
+        
         self.som_pulo.set_volume(1)
-        # ajustar o som do pulo
+        
         self.imagens_dinossaouro = []
         for i in range(3):
             img = sprite_sheet.subsurface((i*32,0),(32,32))
             img = pygame.transform.scale(img, (32*3, 32*3)) 
             self.imagens_dinossaouro.append(img)
             
-
         self.index_lista = 0
         self.image = self.imagens_dinossaouro[self.index_lista]
         self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image) #mascara da sprite do dinossauro
         self.pos_y_inicial = ALTURA -64 - 96//2
         self.rect.center = (100, ALTURA - 64) 
         self.pulo = False
-        #atributo para o salto
-
+        
     def pular(self):
         self.pulo = True
-        self.som_pulo.play() #ativa o son do pulo
+        self.som_pulo.play() 
 
     def update(self):
         if self.pulo == True:
@@ -85,7 +91,7 @@ class Nuvens(pygame.sprite.Sprite):
 class Chao(pygame.sprite.Sprite):
     def __init__(self, pos_x):
         pygame.sprite.Sprite.__init__(self)
-        self.image = sprite_sheet.subsurface((64*3, 0), (32,32))
+        self.image = sprite_sheet.subsurface((6*32, 0), (32,32))
         self.image = pygame.transform.scale(self.image, (32*2, 32*2))
         self.rect = self.image.get_rect()
         self.rect.y = ALTURA - 64
@@ -95,8 +101,22 @@ class Chao(pygame.sprite.Sprite):
         if self.rect.topright[0] < 0: 
             self.rect.x = LARGURA 
         self.rect.x -= 10
-        
-    
+
+class Cacto(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = sprite_sheet.subsurface((5*32, 0),(32,32))
+        self.image = pygame.transform.scale(self.image, (32*2, 32*2))
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image) #mascara
+        self.rect.center = (LARGURA, ALTURA - 64)
+        #criar e carregar a imagen do cacto
+    def update(self):
+        if self.rect.topright[0] < 0:
+            self.rect.x = LARGURA
+        self.rect.x -= 10
+        #fazer o loop de repetição do cacto na tela
+           
 todas_as_sprites = pygame.sprite.Group()
 dino = Dino()
 todas_as_sprites.add(dino)
@@ -107,8 +127,14 @@ for i in range(4):
 
 for i in range(LARGURA*2//64):
     chao = Chao(i)
-    todas_as_sprites.add(chao) # instanciar loop para repetição do chao
+    todas_as_sprites.add(chao) 
 
+cacto = Cacto()
+todas_as_sprites.add(cacto)
+#instanciar o cacto
+
+grupo_obstaculos = pygame.sprite.Group()
+grupo_obstaculos.add(cacto)
 
 relogio = pygame.time.Clock()
 while True:
@@ -121,13 +147,25 @@ while True:
         
         if event.type == KEYDOWN:
             if event.key == K_SPACE:
-                if dino.rect.y != dino.pos_y_inicial: #função para permitir apenas um pulo por vez
+                if dino.rect.y != dino.pos_y_inicial: 
                     pass
                 else:
                     dino.pular()
-                    
+
+    colisoes = pygame.sprite.spritecollide(dino, grupo_obstaculos, False, pygame.sprite.collide_mask)       
 
     todas_as_sprites.draw(tela)
-    todas_as_sprites.update()
+
+    if colisoes and colidiu == False:
+        som_colisao.play()
+        colidiu = True
+    if colidiu == True:
+        pass
+    else:
+        todas_as_sprites.update()       
+        #fazer o dinossauro parar quando houver colisão.    
+                    
+    
+    
 
     pygame.display.flip()
