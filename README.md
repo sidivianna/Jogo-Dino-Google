@@ -4,6 +4,7 @@
 Recriação do jogo do Dinossauro do google.
 Jogo criado no desenvolvimento de um minicurso sobre a biblioteca Pygame desenvolvido pelo Youtube.
 
+O repositório contem dividido por branchs os passo a passo realizados no projeto.
 
 
 Link para o canal do Youteube:
