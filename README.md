@@ -1,12 +1,13 @@
-# Jogo-Dino-google
-Recriação do jogo do dinossauro do Google
+# Jogo-Dino-Google
+![Captura de Tela (126)](https://user-images.githubusercontent.com/103837121/188328362-a425f3b5-43cc-47ad-b827-e5c4a5b94267.png)
 
-Parte 8-Game-Over
+Recriação do jogo do Dinossauro do google.
+Jogo criado no desenvolvimento de um minicurso sobre a biblioteca Pygame desenvolvido pelo Youtube.
 
-- criada a mensagem de gameover quando houver colisão.
-- criar a função para reiniciar o jogo quando houver colisão.
-- definir o reinicio apenas para quando houver colisão.
-- definir o reiniciar exatamente da posição inicial do jogo.
-- correção de bug de som.
+
+
+Link para o canal do Youteube:
+https://www.youtube.com/watch?v=AzGLH60puSQ
+
 
 
